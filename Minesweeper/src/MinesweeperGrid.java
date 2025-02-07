@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class MinesweeperGrid {
     MinesweeperTile[][] Tiles;
     int numberOfBombs;
@@ -19,7 +21,16 @@ public class MinesweeperGrid {
     public final String DEFAULT_UNKNOWN_BG_2 = "\033[1;43m";
 
 
-    public String[] TileColors = {"\033[1;97m", "\033[1;94m", "\033[1;92m", "\033[1;91m",  "\033[1;95m", "\033[1;93m", "\033[1;96m", "\033[1;34m","\033[1;37m"};
+    public String[] TileColors = {
+            "\033[1;97m",
+            "\033[1;94m",
+            "\033[1;92m",
+            "\033[1;91m",
+            "\033[1;95m",
+            "\033[1;93m",
+            "\033[1;96m",
+            "\033[1;34m",
+            "\033[1;37m"};
 
     public MinesweeperGrid(int size, float BombRatio)
     {
@@ -41,6 +52,7 @@ public class MinesweeperGrid {
             for(int y = 0 ; y < Tiles.length ; y++)
             {
                 Tiles[x][y] = new MinesweeperTile();
+                Tiles[x][y].SetCoords(x,y);
             }
         }
     }
@@ -66,7 +78,7 @@ public class MinesweeperGrid {
         return false;
     }
 
-    private void SetSurroundingTiles()
+    public void SetSurroundingTiles()
     {
         for(int x = 0 ; x < Tiles.length ; x++)
         {
@@ -95,15 +107,37 @@ public class MinesweeperGrid {
 
     public void ClearSurroundingBombs(int x, int y)
     {
+        if(Tiles[x][y].IsBomb()) { Tiles[x][y].SetBomb(false); numberOfBombs--; }
         if(Tiles[x][y].GetSurroundingBombs() == 0) return;
 
         MinesweeperTile[] surroundingTiles = GetSurroundingTiles(x,y);
         for(MinesweeperTile t : surroundingTiles)
         {
-            if(t==null) continue;
+            if(t==null || !t.IsBomb()) continue;
+            numberOfBombs--;
             t.SetBomb(false);
         }
+    }
 
+    public void FloodFill(int x, int y)
+    {
+        ArrayList<MinesweeperTile> NeedToCheck = new ArrayList<>();
+
+        //i call this stupid search
+        for(MinesweeperTile t : GetSurroundingTiles(x,y))
+        {
+            if( t==null || t.IsRevealed()) continue;
+
+            if(t.GetSurroundingBombs() != 0) { t.Reveal(); continue; }
+
+            t.Reveal();
+            NeedToCheck.add(t);
+        }
+
+        for(MinesweeperTile t : NeedToCheck)
+        {
+            FloodFill(t.GetXCoord(), t.GetYCoord());
+        }
     }
 
 

@@ -14,7 +14,7 @@ public class MinesweeperPlayer {
         //System.out.println("\n");
         //Grid = new MinesweeperGrid(gridSize, difficulty);
         int gridSize = 8;
-        Grid = new MinesweeperGrid(gridSize, 0.1f);
+        Grid = new MinesweeperGrid(gridSize, 0.15f);
         turn = 0;
 
         while(!GameOver)
@@ -25,7 +25,12 @@ public class MinesweeperPlayer {
             //System.out.println("Selected tile: " + targetTile[0] + ", " + targetTile[1]);
             Grid.SelectTile(targetTile[0], targetTile[1]);
 
-            if(turn == 0) Grid.ClearSurroundingBombs(targetTile[0], targetTile[1]);
+            if(turn == 0) {
+                Grid.ClearSurroundingBombs(targetTile[0], targetTile[1]);
+                Grid.SetSurroundingTiles();
+            }
+
+            Grid.FloodFill(targetTile[0], targetTile[1]);
 
             turn++;
         }
