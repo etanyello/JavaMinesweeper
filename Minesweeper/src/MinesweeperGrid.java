@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class MinesweeperGrid {
     MinesweeperTile[][] Tiles;
-    int numberOfBombs;
+    private int numberOfBombs;
 
 
     public final String ANSI_RESET = "\u001B[0m";
@@ -186,5 +186,10 @@ public class MinesweeperGrid {
         return Output;
     }
 
-    public int GetTotalBombs() {return numberOfBombs;}
+    public int GetTotalBombs() { return numberOfBombs; }
+    public MinesweeperTile GetTileAt(int x, int y)
+    {
+        if(x >= Tiles.length || y >= Tiles.length || x < 0 || y < 0) return null;
+        return Tiles[x][y];
+    }
 }

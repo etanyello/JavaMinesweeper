@@ -20,9 +20,8 @@ public class MinesweeperPlayer {
         while(!GameOver)
         {
             PrintGrid();
-            System.out.println("There are: " + Grid.numberOfBombs + " bombs on the grid...");
+            System.out.println("There are: " + Grid.GetTotalBombs() + " bombs on the grid...");
             int[] targetTile = InputParser.AskForCoordinates(input, "Enter your move: ", gridSize, "Invalid tile, enter again\n");
-            //System.out.println("Selected tile: " + targetTile[0] + ", " + targetTile[1]);
             Grid.SelectTile(targetTile[0], targetTile[1]);
 
             if(turn == 0) {
@@ -30,6 +29,13 @@ public class MinesweeperPlayer {
                 Grid.SetSurroundingTiles();
             }
 
+            if(Grid.GetTileAt(targetTile[0], targetTile[1]) != null) {
+                if(Grid.GetTileAt(targetTile[0], targetTile[1]).IsBomb()) {
+                    GameOver = true;
+                    Grid.PrintGrid();
+                    System.out.println("\033[1;91m" + "! ! ! Game Over ! ! !");
+                }
+            }
             Grid.FloodFill(targetTile[0], targetTile[1]);
 
             turn++;
