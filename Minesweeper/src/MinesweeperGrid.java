@@ -1,17 +1,23 @@
 public class MinesweeperGrid {
     MinesweeperTile[][] Tiles;
+    int numberOfBombs;
+
+
+    public final String ANSI_RESET = "\u001B[0m";
     private final String SIDE_BAR = "▓ ";
-    private final char SEPERATOR = '|';
     private final String BOTTOM_BAR = "▗▄▖";
-    private final char BOMB_ICON = '◉';
+    private final String BOMB_ICON = "\033[1;91m" + "◉ " + ANSI_RESET;
     // ▗▄▖
     // ▝▀▘
 
     //Section - ANSI Colors
-    public final String ANSI_RESET = "\u001B[0m";
+
     public final String DEFAULT_TILE_BG_1 = "\u001B[47m";
     public final String DEFAULT_TILE_BG_2 = "\u001B[100m";
-    public final String BOMB_TEXT = "\033[1;91m";
+
+    public final String DEFAULT_UNKNOWN_BG_1 = "\033[1;103m";
+    public final String DEFAULT_UNKNOWN_BG_2 = "\033[1;43m";
+
 
     public String[] TileColors = {"\033[1;97m", "\033[1;94m", "\033[1;92m", "\033[1;91m",  "\033[1;95m", "\033[1;93m", "\033[1;96m", "\033[1;34m","\033[1;37m"};
 
@@ -41,7 +47,8 @@ public class MinesweeperGrid {
 
     private void PlaceBombs(float BombRatio)
     {
-        int numberOfBombs = (int)(Math.clamp(BombRatio,0f, 1f) * (Tiles.length* Tiles.length));
+        numberOfBombs = (int)(Math.clamp(BombRatio,0f, 1f) * (Tiles.length* Tiles.length));
+        int t_bomb = numberOfBombs;
 
         while(numberOfBombs > 0)
         {
@@ -50,6 +57,13 @@ public class MinesweeperGrid {
             tile.SetBomb(true);
             numberOfBombs--;
         }
+        numberOfBombs = t_bomb;
+    }
+
+    public boolean SelectTile(int x, int y)
+    {
+        Tiles[x][y].Reveal();
+        return false;
     }
 
     private void SetSurroundingTiles()
@@ -79,23 +93,35 @@ public class MinesweeperGrid {
         return SurroundingTiles;
     }
 
+    public void ClearSurroundingBombs(int x, int y)
+    {
+        if(Tiles[x][y].GetSurroundingBombs() == 0) return;
+
+        MinesweeperTile[] surroundingTiles = GetSurroundingTiles(x,y);
+        for(MinesweeperTile t : surroundingTiles)
+        {
+            if(t==null) continue;
+            t.SetBomb(false);
+        }
+
+    }
 
 
     public void PrintGrid()
     {
-        int j = 0;
-        for (MinesweeperTile[] tile : Tiles) {
-            j++;
+        System.out.println();
+        int j = Tiles.length+1;
+        for(int p = Tiles.length - 1 ; p >= 0 ; p--) {
+            j--;
             System.out.print(j + " ");
-            for(int i = 0 ; i < tile.length ; i++)
+            for(int i = 0 ; i < Tiles[p].length ; i++)
             {
                 System.out.print(i==0 ? SIDE_BAR : "");
-                String output = tile[i].IsBomb() ? BOMB_TEXT + BOMB_ICON :  String.valueOf(tile[i].GetSurroundingBombs());
-                System.out.print(PrintTile(tile[i], i+j));
+                System.out.print(PrintTile(Tiles[p][i], i+j));
             }
             System.out.println();
         }
-        System.out.print("    ");
+        System.out.print("  █▖");
         for(int i = 0 ; i < Tiles.length; i++)
         {
             System.out.print(BOTTOM_BAR);
@@ -106,16 +132,25 @@ public class MinesweeperGrid {
         {
             System.out.print(" " + ((char)(i+97)) + " ");
         }
+        System.out.println("\n");
     }
 
+    //Ooooh boy
     public String PrintTile(MinesweeperTile tile, int x) {
-        String Output = (x % 2 == 0 ? DEFAULT_TILE_BG_1 : DEFAULT_TILE_BG_2) + " ";
+        //Set background
+        String Output = "";
+        if(tile.IsRevealed()) Output += (x % 2 == 0 ? DEFAULT_TILE_BG_1 : DEFAULT_TILE_BG_2) + " ";
+        else {Output += (x % 2 == 0 ? DEFAULT_UNKNOWN_BG_1 : DEFAULT_UNKNOWN_BG_2) + "   " + ANSI_RESET; return Output;}
 
-        if (tile.IsBomb()) Output += (BOMB_TEXT + BOMB_ICON);
+        //Set tile contents
+        if (tile.IsBomb()) Output += BOMB_ICON;
         else {
-            Output += (TileColors[tile.GetSurroundingBombs()] + tile.GetSurroundingBombs());
+            Output += tile.GetSurroundingBombs() == 0 ? " " : (TileColors[tile.GetSurroundingBombs()] + tile.GetSurroundingBombs());
+            Output +=  " " + ANSI_RESET;
         }
-        Output +=  " " + ANSI_RESET;
+
         return Output;
     }
+
+    public int GetTotalBombs() {return numberOfBombs;}
 }
