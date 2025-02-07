@@ -10,7 +10,7 @@ public class MinesweeperTile {
     {
         for(MinesweeperTile t : SurroundingTiles)
         {
-            if(!t.isBomb) continue;
+            if(t==null || !t.isBomb) continue;
             surroundingBombs++;
         }
     }
