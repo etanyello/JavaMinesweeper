@@ -7,7 +7,7 @@ public class MinesweeperGrid {
 
     private final String SIDE_BAR = "▓ ";
     private final String BOTTOM_BAR = "▗▄▖";
-    private final String BOMB_ICON = "\033[0;100m" + "\033[0;31m" + " ◉ " + ANSIcolors.ANSI_RESET;
+    private final String BOMB_ICON = "\033[0;40m" + "\033[1;31m" + " ◉ " + ANSIcolors.ANSI_RESET;
     private final String FLAG_ICON = " \uD83E\uDC37 ";
     // ▗▄▖
     // ▝▀▘
@@ -155,10 +155,7 @@ public class MinesweeperGrid {
 
         for(int p = Tiles.length - 1 ; p >= 0 ; p--) {
             j--;
-
-            //"%1$" + length + "s"
-
-            System.out.print(String.format("%" + m + "s", j) + " ");
+            System.out.print(ANSIcolors.CYAN_TEXT + String.format("%" + m + "s", j) + " " + ANSIcolors.ANSI_RESET);
             for(int i = 0 ; i < Tiles[p].length ; i++)
             {
                 System.out.print(i==0 ? SIDE_BAR : "");
@@ -173,13 +170,13 @@ public class MinesweeperGrid {
             System.out.print(BOTTOM_BAR);
         }
 
-        System.out.println();
+        System.out.println(ANSIcolors.CYAN_TEXT);
         System.out.print(String.format("%" + (m+3) + "s", "   "));
         for(int i = 0 ; i < Tiles.length; i++)
         {
             System.out.print(" " + ((char)(i+97)) + " ");
         }
-        System.out.println("\n");
+        System.out.println("\n" + ANSIcolors.ANSI_RESET);
     }
 
     //Ooooh boy

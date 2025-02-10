@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class MinesweeperPlayer {
     private MinesweeperGrid Grid;
-    private List<String> ValidCommands = List.of("help", "flag", "grid", "show", "commands", "reset", "new", "color", "reveal");
+    private List<String> ValidCommands = List.of("help", "flag", "grid", "show", "commands", "reset", "new", "color", "reveal", "exit");
     private ColorEnum selectedColor = ColorEnum.Yellow;
     private MinesweeperTimer timer;
 
@@ -76,16 +76,17 @@ public class MinesweeperPlayer {
                 CMD_ChangeColor(userCommands[1]); PrintGrid();
                 return 1;
             case "reveal": CMD_Reveal(); return 1;
+            case "exit": CMD_Exit(); return 1;
         }
 
         //User entered a tile (a1, d4, b8, etc)
         if(userCommand.length() == 2 ||  userCommand.length() == 3){
             if(CMD_ClickTile(userCommand)) return 0;
-            PrintGrid();
             if(Grid.CheckForWin()) {
-                GameOverMessage(true);
-                GameOver = true;
+                CMD_Reveal();
+                return 1;
             }
+            PrintGrid();
             return 1;
         }
 
@@ -159,8 +160,9 @@ public class MinesweeperPlayer {
         System.out.println(ANSIcolors.BLUE_TEXT + "flag <" + ANSIcolors.YELLOW_TEXT + "tile" + ANSIcolors.BLUE_TEXT + ">" + ANSIcolors.ANSI_RESET + " - Flags a tile you think a bomb is at");
         System.out.println(ANSIcolors.BLUE_TEXT + "grid, show" + ANSIcolors.ANSI_RESET + " - Prints out the grid");
         System.out.println(ANSIcolors.BLUE_TEXT + "reset, new" + ANSIcolors.ANSI_RESET + " - Generates a new Grid");
+        System.out.println(ANSIcolors.BLUE_TEXT + "exit" + ANSIcolors.ANSI_RESET + " - Closes the game");
         System.out.println(ANSIcolors.BLUE_TEXT + "color <" + ANSIcolors.YELLOW_TEXT + "option" + ANSIcolors.BLUE_TEXT + ">" + ANSIcolors.ANSI_RESET + " - Changes grid color");
-        System.out.println(ANSIcolors.YELLOW_TEXT + "    option" + ANSIcolors.ANSI_RESET + ": yellow, blue, green, pink, cyan, red, chess");
+        System.out.println(ANSIcolors.YELLOW_TEXT + "    option" + ANSIcolors.ANSI_RESET + ": yellow, blue, green, pink, cyan, red, chess, invisible");
         System.out.println(ANSIcolors.BLUE_TEXT + "<" + ANSIcolors.YELLOW_TEXT + "tile" + ANSIcolors.BLUE_TEXT + ">" + ANSIcolors.ANSI_RESET + " - Selects that tile (e.g \"a4\" or \"f6\")");
         System.out.println();
         System.out.println(ANSIcolors.RED_TEXT + "reveal" + ANSIcolors.ANSI_RESET + " - (" + ANSIcolors.RED_TEXT + "Cheat" + ANSIcolors.ANSI_RESET + ") Reveals the whole grid");
@@ -213,6 +215,11 @@ public class MinesweeperPlayer {
             GameOverMessage(true);
             GameOver = true;
         }
+    }
+
+    private void CMD_Exit() {
+        System.out.println("\nGoodbye!\n");
+        System.exit(0);
     }
 
     private void GameOverMessage(boolean win)
