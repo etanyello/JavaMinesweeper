@@ -1,11 +1,25 @@
 import java.security.InvalidParameterException;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public abstract class InputParser {
 
+    public static boolean AskForBoolInput(Scanner input, String query, char trueOption, char falseOption)
+    {
+        String userInput = "";
+        while(true)
+        {
+            System.out.print(query);
+            userInput = input.nextLine();
 
+            if(Objects.equals(userInput, Character.toString(trueOption).toLowerCase())) return true;
+            if(Objects.equals(userInput, Character.toString(falseOption).toLowerCase())) return false;
+
+            System.out.println("Invalid Input, enter again\n");
+        }
+    }
 
 
     public static int AskForIntInput(Scanner input, String query, int lowerBounds, int upperBounds)
@@ -15,7 +29,7 @@ public abstract class InputParser {
             try {
                 System.out.print(query);
                 returnVal = input.nextInt();
-                if(returnVal < lowerBounds || returnVal > upperBounds) System.out.println("Invalid Input, enter again\n");
+                if(returnVal < lowerBounds || returnVal > upperBounds) System.out.println(ANSIcolors.RED_TEXT + "Invalid Input, enter again\n" + ANSIcolors.ANSI_RESET);
             } catch (InputMismatchException e) {
                 System.out.println(ANSIcolors.RED_TEXT + "Invalid Input, enter again\n" + ANSIcolors.ANSI_RESET);
             }
@@ -29,7 +43,7 @@ public abstract class InputParser {
         while(true)
         {
             System.out.print(query);
-            String fullInput = input.nextLine();
+            String fullInput = input.nextLine().toLowerCase();
             String[] inputs = fullInput.split("\\s+"); //use instead of space to split multiple spaces
 
             if((fullInput.length() == 2 || fullInput.length() == 3)) return fullInput;

@@ -18,8 +18,8 @@ public class MinesweeperGrid {
 
     public final String DEFAULT_TILE_BG_1 = "\u001B[47m";
     public final String DEFAULT_TILE_BG_2 = "\u001B[100m";
-    public final String DEFAULT_UNKNOWN_BG_1 = "\u001B[103m";
-    public final String DEFAULT_UNKNOWN_BG_2 = "\u001B[43m";
+    public String DEFAULT_UNKNOWN_BG_1 = "\u001B[103m";
+    public String DEFAULT_UNKNOWN_BG_2 = "\u001B[43m";
 
 
     public String[] TileColors = {
@@ -221,5 +221,13 @@ public class MinesweeperGrid {
             }
         }
         return RemainingUnknownTiles <= numberOfBombs;
+    }
+
+    public void SetGridColor(String grid1, String grid2)
+    {
+        //"\u001B[103m";
+        //"\u001B[43m";
+        DEFAULT_UNKNOWN_BG_1 = grid1;
+        DEFAULT_UNKNOWN_BG_2 = grid2;
     }
 }
