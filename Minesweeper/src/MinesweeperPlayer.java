@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class MinesweeperPlayer {
     private MinesweeperGrid Grid;
-    private List<String> ValidCommands = List.of("help", "flag", "grid", "show", "commands", "reset", "new", "color", "reveal", "exit");
+    private final List<String> ValidCommands = List.of("help", "flag", "grid", "show", "commands", "reset", "new", "color", "reveal", "exit");
     private ColorEnum selectedColor = ColorEnum.Yellow;
     private MinesweeperTimer timer;
 
@@ -12,6 +12,8 @@ public class MinesweeperPlayer {
     private int turn;
     private int gridSize;
     float difficulty;
+
+    public MinesweeperPlayer() { StartGame(); }
 
     public void StartGame()
     {
