@@ -213,6 +213,14 @@ public class MinesweeperGrid {
     }
     public boolean CheckForWin()
     {
+        return GetRemainingUnrevealedTiles() <= numberOfBombs;
+    }
+
+    public float GetUnrevealedTilesRatio(){
+        return 1f - ((float) (GetRemainingUnrevealedTiles()-numberOfBombs) / (Tiles.length * Tiles.length));
+    }
+
+    private int GetRemainingUnrevealedTiles(){
         int RemainingUnknownTiles = 0;
         for (MinesweeperTile[] tile : Tiles) {
             for (int y = 0; y < Tiles.length; y++) {
@@ -220,7 +228,7 @@ public class MinesweeperGrid {
                 RemainingUnknownTiles += !tile[y].IsRevealed() ? 1 : 0;
             }
         }
-        return RemainingUnknownTiles <= numberOfBombs;
+        return RemainingUnknownTiles;
     }
 
     public void SetGridColor(String grid1, String grid2)

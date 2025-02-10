@@ -14,8 +14,8 @@ public abstract class InputParser {
             System.out.print(query);
             userInput = input.nextLine();
 
-            if(Objects.equals(userInput, Character.toString(trueOption).toLowerCase())) return true;
-            if(Objects.equals(userInput, Character.toString(falseOption).toLowerCase())) return false;
+            if(Objects.equals(userInput.toLowerCase(), Character.toString(trueOption))) return true;
+            if(Objects.equals(userInput.toLowerCase(), Character.toString(falseOption))) return false;
 
             System.out.println("Invalid Input, enter again\n");
         }

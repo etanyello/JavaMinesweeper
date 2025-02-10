@@ -7,10 +7,12 @@ public class MinesweeperPlayer {
     private MinesweeperGrid Grid;
     private List<String> ValidCommands = List.of("help", "flag", "grid", "show", "commands", "reset", "new", "color");
     private ColorEnum selectedColor = ColorEnum.Yellow;
+    private MinesweeperTimer timer;
 
     private boolean GameOver = false;
     private int turn;
     private int gridSize;
+    float difficulty;
 
     public void StartGame()
     {
@@ -23,19 +25,26 @@ public class MinesweeperPlayer {
 
             while(!GameOver) { GetPlayerCommand(input); }
 
+            System.out.println(ANSIcolors.YELLOW_TEXT + "Final score: " + ANSIcolors.ANSI_RESET + CalculateScore());
+
+            timer.CloseTimer();
+
             again = InputParser.AskForBoolInput(input, "\nDo you want to play again (" + ANSIcolors.BLUE_TEXT  + "y/n" + ANSIcolors.ANSI_RESET + "): ", 'y', 'n');
         }
+
+        input.close();
     }
 
     private void InitialiseNewGame(Scanner input)
     {
         gridSize = InputParser.AskForIntInput(input, "How big do you want your grid (" + ANSIcolors.BLUE_TEXT  + "5-26" + ANSIcolors.ANSI_RESET + "): ", 5, 26);
-        float difficulty = 0.05f + (0.05f * (float)InputParser.AskForIntInput(input, "What difficulty would you like: (" + ANSIcolors.BLUE_TEXT  + "1-5" + ANSIcolors.ANSI_RESET + "): ", 1, 5));
+        difficulty = 0.05f + (0.05f * (float)InputParser.AskForIntInput(input, "What difficulty would you like: (" + ANSIcolors.BLUE_TEXT  + "1-5" + ANSIcolors.ANSI_RESET + "): ", 1, 5));
         System.out.println("\n");
         Grid = new MinesweeperGrid(gridSize, difficulty);
         turn = 0;
         GameOver = false;
         ChangeGridColor(selectedColor);
+        timer = new MinesweeperTimer();
         PrintGrid();
     }
 
@@ -70,7 +79,7 @@ public class MinesweeperPlayer {
             if(CMD_ClickTile(userCommand)) return 0;
             PrintGrid();
             if(Grid.CheckForWin()) {
-                System.out.println("\n" +ANSIcolors.YELLOW_TEXT + "! ! ! You Won ! ! !" + ANSIcolors.ANSI_RESET);
+                GameOverMessage(true);
                 GameOver = true;
             }
             return 1;
@@ -102,7 +111,7 @@ public class MinesweeperPlayer {
                 if (Grid.GetTileAt(targetTile[0], targetTile[1]).IsBomb()) {
                     GameOver = true;
                     Grid.PrintGrid();
-                    System.out.println(ANSIcolors.RED_TEXT + "! ! ! Game Over ! ! !" + ANSIcolors.ANSI_RESET);
+                    GameOverMessage(false);
                     return true;
                 }
             }
@@ -166,6 +175,19 @@ public class MinesweeperPlayer {
             case Cyan -> Grid.SetGridColor("\u001B[106m", "\u001B[46m");
             case Pink -> Grid.SetGridColor("\u001B[105m", "\u001B[45m");
         }
+    }
+
+    private void GameOverMessage(boolean win)
+    {
+        if(win) System.out.println("\n" + ANSIcolors.YELLOW_TEXT + "! ! ! You Won ! ! !" + ANSIcolors.ANSI_RESET);
+        else System.out.println(ANSIcolors.RED_TEXT + "! ! ! Game Over ! ! !" + ANSIcolors.ANSI_RESET);
+        System.out.println("\n" + ANSIcolors.YELLOW_TEXT + "You won in "+ ANSIcolors.ANSI_RESET + timer.GetTime() + ANSIcolors.YELLOW_TEXT + " seconds! " + ANSIcolors.ANSI_RESET);
+    }
+
+    private int CalculateScore(){
+        int score = (int)(Grid.GetUnrevealedTilesRatio() * ( (difficulty*10000*(Math.pow(gridSize, 1.25f)) - ( gridSize * 100 * Math.log(timer.GetTime())))));
+        if(Grid.GetUnrevealedTilesRatio() == 1f) score += gridSize * 1000;
+        return score;
     }
 
 }
