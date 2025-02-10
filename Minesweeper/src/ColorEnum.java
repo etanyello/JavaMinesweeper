@@ -3,5 +3,8 @@ enum ColorEnum {
     Green,
     Blue,
     Cyan,
-    Pink
+    Pink,
+    Red,
+    Chess,
+    Invisible
 }

@@ -8,7 +8,7 @@ public class MinesweeperGrid {
     private final String SIDE_BAR = "▓ ";
     private final String BOTTOM_BAR = "▗▄▖";
     private final String BOMB_ICON = "\033[0;100m" + "\033[0;31m" + " ◉ " + ANSIcolors.ANSI_RESET;
-    private final String FLAG_ICON = "\033[1;91m" + " \uD83E\uDC37 ";
+    private final String FLAG_ICON = " \uD83E\uDC37 ";
     // ▗▄▖
     // ▝▀▘
     // 🏳 🚩 🢁A🡻⮟🠷
@@ -20,6 +20,7 @@ public class MinesweeperGrid {
     public final String DEFAULT_TILE_BG_2 = "\u001B[100m";
     public String DEFAULT_UNKNOWN_BG_1 = "\u001B[103m";
     public String DEFAULT_UNKNOWN_BG_2 = "\u001B[43m";
+    public String DEFAULT_FLAG_COLOR = "\033[1;91m";
 
 
     public String[] TileColors = {
@@ -187,7 +188,7 @@ public class MinesweeperGrid {
         String Output = "";
         if(tile.IsRevealed()) Output += (x % 2 == 0 ? DEFAULT_TILE_BG_1 : DEFAULT_TILE_BG_2);
         else if (!tile.IsRevealed() && tile.IsFlagged()) {
-            Output += (x % 2 == 0 ? DEFAULT_UNKNOWN_BG_1 : DEFAULT_UNKNOWN_BG_2) + FLAG_ICON + ANSIcolors.ANSI_RESET;
+            Output += (x % 2 == 0 ? DEFAULT_UNKNOWN_BG_1 : DEFAULT_UNKNOWN_BG_2) + DEFAULT_FLAG_COLOR + FLAG_ICON + ANSIcolors.ANSI_RESET;
             return Output;
         }
         else {
@@ -231,11 +232,10 @@ public class MinesweeperGrid {
         return RemainingUnknownTiles;
     }
 
-    public void SetGridColor(String grid1, String grid2)
+    public void SetColorScheme(String grid1, String grid2, String flagColor)
     {
-        //"\u001B[103m";
-        //"\u001B[43m";
         DEFAULT_UNKNOWN_BG_1 = grid1;
         DEFAULT_UNKNOWN_BG_2 = grid2;
+        DEFAULT_FLAG_COLOR = flagColor;
     }
 }

@@ -1,4 +1,3 @@
-import java.awt.*;
 import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.Scanner;
@@ -160,8 +159,8 @@ public class MinesweeperPlayer {
         System.out.println(ANSIcolors.BLUE_TEXT + "flag <" + ANSIcolors.YELLOW_TEXT + "tile" + ANSIcolors.BLUE_TEXT + ">" + ANSIcolors.ANSI_RESET + " - Flags a tile you think a bomb is at");
         System.out.println(ANSIcolors.BLUE_TEXT + "grid, show" + ANSIcolors.ANSI_RESET + " - Prints out the grid");
         System.out.println(ANSIcolors.BLUE_TEXT + "reset, new" + ANSIcolors.ANSI_RESET + " - Generates a new Grid");
-        System.out.println(ANSIcolors.BLUE_TEXT + "color <" + ANSIcolors.YELLOW_TEXT + "color" + ANSIcolors.BLUE_TEXT + ">" + ANSIcolors.ANSI_RESET + " - Changes grid color");
-        System.out.println("    Options:\n      -yellow\n      -blue\n      -green\n      -pink\n      -cyan");
+        System.out.println(ANSIcolors.BLUE_TEXT + "color <" + ANSIcolors.YELLOW_TEXT + "option" + ANSIcolors.BLUE_TEXT + ">" + ANSIcolors.ANSI_RESET + " - Changes grid color");
+        System.out.println(ANSIcolors.YELLOW_TEXT + "    option" + ANSIcolors.ANSI_RESET + ": yellow, blue, green, pink, cyan, red, chess");
         System.out.println(ANSIcolors.BLUE_TEXT + "<" + ANSIcolors.YELLOW_TEXT + "tile" + ANSIcolors.BLUE_TEXT + ">" + ANSIcolors.ANSI_RESET + " - Selects that tile (e.g \"a4\" or \"f6\")");
         System.out.println();
         System.out.println(ANSIcolors.RED_TEXT + "reveal" + ANSIcolors.ANSI_RESET + " - (" + ANSIcolors.RED_TEXT + "Cheat" + ANSIcolors.ANSI_RESET + ") Reveals the whole grid");
@@ -179,6 +178,9 @@ public class MinesweeperPlayer {
             case "green": selectedColor = ColorEnum.Green; break;
             case "cyan": selectedColor = ColorEnum.Cyan; break;
             case "pink": selectedColor = ColorEnum.Pink; break;
+            case "red": selectedColor = ColorEnum.Red; break;
+            case "chess": selectedColor = ColorEnum.Chess; break;
+            case "invisible": selectedColor = ColorEnum.Invisible; break;
             default: System.out.println(ANSIcolors.RED_TEXT + "Unknown color...\n" + ANSIcolors.ANSI_RESET); return;
         }
         ChangeGridColor(selectedColor);
@@ -188,11 +190,15 @@ public class MinesweeperPlayer {
     {
         switch (color)
         {
-            case Yellow -> Grid.SetGridColor("\u001B[103m", "\u001B[43m");
-            case Blue -> Grid.SetGridColor("\u001B[104m", "\u001B[44m");
-            case Green -> Grid.SetGridColor("\u001B[102m", "\u001B[42m");
-            case Cyan -> Grid.SetGridColor("\u001B[106m", "\u001B[46m");
-            case Pink -> Grid.SetGridColor("\u001B[105m", "\u001B[45m");
+            case Yellow -> Grid.SetColorScheme("\u001B[103m", "\u001B[43m", "\033[1;91m");
+            case Blue -> Grid.SetColorScheme("\u001B[104m", "\u001B[44m", "\033[1;93m");
+            case Green -> Grid.SetColorScheme("\u001B[102m", "\u001B[42m", "\033[1;91m");
+            case Cyan -> Grid.SetColorScheme("\u001B[106m", "\u001B[46m", "\033[1;93m");
+            case Pink -> Grid.SetColorScheme("\u001B[105m", "\u001B[45m", "\033[1;92m");
+            case Red ->  Grid.SetColorScheme("\u001B[101m", "\u001B[41m", "\033[1;92m");
+            case Chess ->  Grid.SetColorScheme("\u001B[107m", "\u001B[40m", "\033[1;91m");
+            case Invisible ->  Grid.SetColorScheme("\u001B[47m", "\u001B[100m", "\033[1;91m");
+
         }
     }
 
