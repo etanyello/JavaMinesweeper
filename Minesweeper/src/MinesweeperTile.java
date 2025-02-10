@@ -12,6 +12,9 @@ public class MinesweeperTile {
     public boolean IsRevealed() { return isRevealed; }
     public void Reveal() { isRevealed = true; }
 
+    public boolean IsFlagged() {return isFlag;}
+    public void Flag() {isFlag = !isFlag;}
+
     public void SetCoords(int i, int j) {xCord = i ; yCord = j;}
     public int GetXCoord() {return xCord;}
     public int GetYCoord() {return yCord;}

@@ -5,19 +5,21 @@ public class MinesweeperGrid {
     private int numberOfBombs;
 
 
-    public final String ANSI_RESET = "\u001B[0m";
     private final String SIDE_BAR = "▓ ";
     private final String BOTTOM_BAR = "▗▄▖";
-    private final String BOMB_ICON = "\033[0;100m" + "\033[0;31m" + " ◉ " + ANSI_RESET;
+    private final String BOMB_ICON = "\033[0;100m" + "\033[0;31m" + " ◉ " + ANSIcolors.ANSI_RESET;
+    private final String FLAG_ICON = "\033[1;91m" + " \uD83E\uDC37 ";
     // ▗▄▖
     // ▝▀▘
+    // 🏳 🚩 🢁A🡻⮟🠷
+
 
     //Section - ANSI Colors
 
     public final String DEFAULT_TILE_BG_1 = "\u001B[47m";
     public final String DEFAULT_TILE_BG_2 = "\u001B[100m";
-    public final String DEFAULT_UNKNOWN_BG_1 = "\033[1;103m";
-    public final String DEFAULT_UNKNOWN_BG_2 = "\033[1;43m";
+    public final String DEFAULT_UNKNOWN_BG_1 = "\u001B[103m";
+    public final String DEFAULT_UNKNOWN_BG_2 = "\u001B[43m";
 
 
     public String[] TileColors = {
@@ -76,6 +78,8 @@ public class MinesweeperGrid {
         Tiles[x][y].Reveal();
         return false;
     }
+
+    public boolean FlagTile(int x, int y) { Tiles[x][y].Flag(); return false; }
 
     public void SetSurroundingTiles()
     {
@@ -146,9 +150,14 @@ public class MinesweeperGrid {
     {
         System.out.println();
         int j = Tiles.length+1;
+        int m = ExtraMath.GetDigitsIn(j);
+
         for(int p = Tiles.length - 1 ; p >= 0 ; p--) {
             j--;
-            System.out.print(j + " ");
+
+            //"%1$" + length + "s"
+
+            System.out.print(String.format("%" + m + "s", j) + " ");
             for(int i = 0 ; i < Tiles[p].length ; i++)
             {
                 System.out.print(i==0 ? SIDE_BAR : "");
@@ -156,7 +165,9 @@ public class MinesweeperGrid {
             }
             System.out.println();
         }
-        System.out.print("  █▖");
+        System.out.print(String.format("%" + (m+3) + "s", " █▖"));
+
+
         for(int i = 0 ; i < Tiles.length; i++)
         {
             System.out.print(BOTTOM_BAR);
@@ -174,14 +185,21 @@ public class MinesweeperGrid {
     public String PrintTile(MinesweeperTile tile, int x) {
         //Set background
         String Output = "";
-        if(tile.IsRevealed()) { Output += (x % 2 == 0 ? DEFAULT_TILE_BG_1 : DEFAULT_TILE_BG_2) + "";        }
-        else {Output += (x % 2 == 0 ? DEFAULT_UNKNOWN_BG_1 : DEFAULT_UNKNOWN_BG_2) + "   " + ANSI_RESET; return Output;}
+        if(tile.IsRevealed()) Output += (x % 2 == 0 ? DEFAULT_TILE_BG_1 : DEFAULT_TILE_BG_2);
+        else if (!tile.IsRevealed() && tile.IsFlagged()) {
+            Output += (x % 2 == 0 ? DEFAULT_UNKNOWN_BG_1 : DEFAULT_UNKNOWN_BG_2) + FLAG_ICON + ANSIcolors.ANSI_RESET;
+            return Output;
+        }
+        else {
+            Output += (x % 2 == 0 ? DEFAULT_UNKNOWN_BG_1 : DEFAULT_UNKNOWN_BG_2) + "   " + ANSIcolors.ANSI_RESET;
+            return Output;
+        }
 
         //Set tile contents
         if (tile.IsBomb()) Output += BOMB_ICON;
         else {
             Output +=  " " + (tile.GetSurroundingBombs() == 0 ? " " : (TileColors[tile.GetSurroundingBombs()] + tile.GetSurroundingBombs()));
-            Output +=  " " + ANSI_RESET;
+            Output +=  " " + ANSIcolors.ANSI_RESET;
         }
 
         return Output;
@@ -192,5 +210,16 @@ public class MinesweeperGrid {
     {
         if(x >= Tiles.length || y >= Tiles.length || x < 0 || y < 0) return null;
         return Tiles[x][y];
+    }
+    public boolean CheckForWin()
+    {
+        int RemainingUnknownTiles = 0;
+        for (MinesweeperTile[] tile : Tiles) {
+            for (int y = 0; y < Tiles.length; y++) {
+                //Counts remaining tiles
+                RemainingUnknownTiles += !tile[y].IsRevealed() ? 1 : 0;
+            }
+        }
+        return RemainingUnknownTiles <= numberOfBombs;
     }
 }

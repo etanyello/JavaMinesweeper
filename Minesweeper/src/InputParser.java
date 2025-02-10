@@ -5,8 +5,7 @@ import java.util.Scanner;
 
 public abstract class InputParser {
 
-    private static final String RED_TEXT = "\033[0;31m";
-    public static final String ANSI_RESET = "\u001B[0m";
+
 
 
     public static int AskForIntInput(Scanner input, String query, int lowerBounds, int upperBounds)
@@ -18,7 +17,7 @@ public abstract class InputParser {
                 returnVal = input.nextInt();
                 if(returnVal < lowerBounds || returnVal > upperBounds) System.out.println("Invalid Input, enter again\n");
             } catch (InputMismatchException e) {
-                System.out.println("Invalid Input, enter again\n");
+                System.out.println(ANSIcolors.RED_TEXT + "Invalid Input, enter again\n" + ANSIcolors.ANSI_RESET);
             }
             input.nextLine();
         }
@@ -36,7 +35,7 @@ public abstract class InputParser {
             if((fullInput.length() == 2 || fullInput.length() == 3)) return fullInput;
 
             if(!ValidCommands.contains(inputs[0])) {
-                System.out.println("Unknown command...\n");
+                System.out.println(ANSIcolors.RED_TEXT + "Unknown command...\n" + ANSIcolors.ANSI_RESET);
                 continue;
             }
 
@@ -50,17 +49,17 @@ public abstract class InputParser {
         int[] returnVal = new int[2];
 
         if(userInput.length() == 1 || userInput.length() > 3) {
-            throw new InvalidParameterException( RED_TEXT + "Invalid tile length... try again.\n" + ANSI_RESET);
+            throw new InvalidParameterException( ANSIcolors.RED_TEXT + "Invalid tile length... try again.\n" + ANSIcolors.ANSI_RESET);
         }
 
         int yValue = (int)Character.toLowerCase(userInput.charAt(0)) - 97;
         if(yValue < 0 || yValue > maxSize) {
-            throw new InvalidParameterException(RED_TEXT + "Row " + userInput.charAt(0) + " is out of bounds, try again.\n" + ANSI_RESET);
+            throw new InvalidParameterException( ANSIcolors.RED_TEXT + "Row " + userInput.charAt(0) + " is out of bounds, try again.\n" + ANSIcolors.ANSI_RESET);
         }
 
         int xValue =  Integer.parseInt(userInput.substring(1)) - 1;
         if(xValue < 0 || xValue >= maxSize) {
-            throw new InvalidParameterException(RED_TEXT + "Column " + (xValue+1) + " is out of bounds, try again.\n" + ANSI_RESET);
+            throw new InvalidParameterException( ANSIcolors.RED_TEXT + "Column " + (xValue+1) + " is out of bounds, try again.\n" + ANSIcolors.ANSI_RESET);
         }
 
         returnVal[0] = xValue;
