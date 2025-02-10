@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class MinesweeperPlayer {
     private MinesweeperGrid Grid;
-    private List<String> ValidCommands = List.of("help", "flag", "grid", "show", "commands", "reset", "new", "color");
+    private List<String> ValidCommands = List.of("help", "flag", "grid", "show", "commands", "reset", "new", "color", "reveal");
     private ColorEnum selectedColor = ColorEnum.Yellow;
     private MinesweeperTimer timer;
 
@@ -61,6 +61,10 @@ public class MinesweeperPlayer {
                     System.out.println(ANSIcolors.RED_TEXT + "No Parameters given...\n" + ANSIcolors.ANSI_RESET);
                     return 0;
                 };
+                if(userCommands[1].equals("-b") || userCommands[1].equals("bombs")) {
+                    CMD_FlagAllBombs();
+                    return 1;
+                }
                 CMD_FlagTile(userCommands[1]); PrintGrid();
                 return 1;
             case "show", "grid": PrintGrid(); return 1;
@@ -72,6 +76,7 @@ public class MinesweeperPlayer {
                 };
                 CMD_ChangeColor(userCommands[1]); PrintGrid();
                 return 1;
+            case "reveal": CMD_Reveal(); return 1;
         }
 
         //User entered a tile (a1, d4, b8, etc)
@@ -137,6 +142,17 @@ public class MinesweeperPlayer {
         return false;
     }
 
+    private void CMD_FlagAllBombs()
+    {
+        for(int x = 0 ; x < gridSize ; x++){
+            for(int y = 0 ; y < gridSize ; y++){
+                if(!Grid.GetTileAt(x,y).IsBomb()) continue;
+                Grid.GetTileAt(x,y).Flag();
+            }
+        }
+        PrintGrid();
+    }
+
     private void CMD_Help()
     {
         System.out.println("\nCommands:");
@@ -147,6 +163,9 @@ public class MinesweeperPlayer {
         System.out.println(ANSIcolors.BLUE_TEXT + "color <" + ANSIcolors.YELLOW_TEXT + "color" + ANSIcolors.BLUE_TEXT + ">" + ANSIcolors.ANSI_RESET + " - Changes grid color");
         System.out.println("    Options:\n      -yellow\n      -blue\n      -green\n      -pink\n      -cyan");
         System.out.println(ANSIcolors.BLUE_TEXT + "<" + ANSIcolors.YELLOW_TEXT + "tile" + ANSIcolors.BLUE_TEXT + ">" + ANSIcolors.ANSI_RESET + " - Selects that tile (e.g \"a4\" or \"f6\")");
+        System.out.println();
+        System.out.println(ANSIcolors.RED_TEXT + "reveal" + ANSIcolors.ANSI_RESET + " - (" + ANSIcolors.RED_TEXT + "Cheat" + ANSIcolors.ANSI_RESET + ") Reveals the whole grid");
+        System.out.println(ANSIcolors.RED_TEXT + "flag " + ANSIcolors.YELLOW_TEXT + "-b, bombs" + ANSIcolors.ANSI_RESET + " - (" + ANSIcolors.RED_TEXT + "Cheat" + ANSIcolors.ANSI_RESET + ") Flags all bombs");
 
         System.out.println();
     }
@@ -174,6 +193,19 @@ public class MinesweeperPlayer {
             case Green -> Grid.SetGridColor("\u001B[102m", "\u001B[42m");
             case Cyan -> Grid.SetGridColor("\u001B[106m", "\u001B[46m");
             case Pink -> Grid.SetGridColor("\u001B[105m", "\u001B[45m");
+        }
+    }
+
+    private void CMD_Reveal(){
+        for(int x = 0 ; x < gridSize ; x++){
+            for(int y = 0 ; y < gridSize ; y++){
+                Grid.SelectTile(x,y);
+            }
+        }
+        PrintGrid();
+        if(Grid.CheckForWin()) {
+            GameOverMessage(true);
+            GameOver = true;
         }
     }
 

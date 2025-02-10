@@ -167,13 +167,13 @@ public class MinesweeperGrid {
         }
         System.out.print(String.format("%" + (m+3) + "s", " █▖"));
 
-
         for(int i = 0 ; i < Tiles.length; i++)
         {
             System.out.print(BOTTOM_BAR);
         }
 
-        System.out.print("\n    ");
+        System.out.println();
+        System.out.print(String.format("%" + (m+3) + "s", "   "));
         for(int i = 0 ; i < Tiles.length; i++)
         {
             System.out.print(" " + ((char)(i+97)) + " ");
