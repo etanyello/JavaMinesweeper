@@ -8,7 +8,7 @@ public class MinesweeperGrid {
     public final String ANSI_RESET = "\u001B[0m";
     private final String SIDE_BAR = "▓ ";
     private final String BOTTOM_BAR = "▗▄▖";
-    private final String BOMB_ICON = "\033[1;91m" + "◉ " + ANSI_RESET;
+    private final String BOMB_ICON = "\033[0;100m" + "\033[0;31m" + " ◉ " + ANSI_RESET;
     // ▗▄▖
     // ▝▀▘
 
@@ -16,7 +16,6 @@ public class MinesweeperGrid {
 
     public final String DEFAULT_TILE_BG_1 = "\u001B[47m";
     public final String DEFAULT_TILE_BG_2 = "\u001B[100m";
-
     public final String DEFAULT_UNKNOWN_BG_1 = "\033[1;103m";
     public final String DEFAULT_UNKNOWN_BG_2 = "\033[1;43m";
 
@@ -121,6 +120,8 @@ public class MinesweeperGrid {
 
     public void FloodFill(int x, int y)
     {
+        if(Tiles[x][y].GetSurroundingBombs() != 0 ) return;
+
         ArrayList<MinesweeperTile> NeedToCheck = new ArrayList<>();
 
         //i call this stupid search
@@ -173,13 +174,13 @@ public class MinesweeperGrid {
     public String PrintTile(MinesweeperTile tile, int x) {
         //Set background
         String Output = "";
-        if(tile.IsRevealed()) Output += (x % 2 == 0 ? DEFAULT_TILE_BG_1 : DEFAULT_TILE_BG_2) + " ";
+        if(tile.IsRevealed()) { Output += (x % 2 == 0 ? DEFAULT_TILE_BG_1 : DEFAULT_TILE_BG_2) + "";        }
         else {Output += (x % 2 == 0 ? DEFAULT_UNKNOWN_BG_1 : DEFAULT_UNKNOWN_BG_2) + "   " + ANSI_RESET; return Output;}
 
         //Set tile contents
         if (tile.IsBomb()) Output += BOMB_ICON;
         else {
-            Output += tile.GetSurroundingBombs() == 0 ? " " : (TileColors[tile.GetSurroundingBombs()] + tile.GetSurroundingBombs());
+            Output +=  " " + (tile.GetSurroundingBombs() == 0 ? " " : (TileColors[tile.GetSurroundingBombs()] + tile.GetSurroundingBombs()));
             Output +=  " " + ANSI_RESET;
         }
 
