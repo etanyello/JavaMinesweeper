@@ -46,34 +46,33 @@ public abstract class InputParser {
             String fullInput = input.nextLine().toLowerCase();
             String[] inputs = fullInput.split("\\s+"); //use instead of space to split multiple spaces
 
-            if((fullInput.length() == 2 || fullInput.length() == 3)) return fullInput;
+            if(ValidCommands.contains((inputs[0]))) return fullInput;
 
-            if(!ValidCommands.contains(inputs[0])) {
-                System.out.println(ANSIcolors.RED_TEXT + "Unknown command...\n" + ANSIcolors.ANSI_RESET);
-                continue;
-            }
+            if((inputs[0].length() == 2 || inputs[0].length() == 3)) return fullInput;
 
-            return fullInput;
+            System.out.println(ANSIcolors.RED_TEXT + "Unknown command...\n" + ANSIcolors.ANSI_RESET);
         }
     }
 
     public static int[] AskForCoordinates(String userInput, int maxSize) throws InvalidParameterException
     {
+        userInput = userInput.replaceAll("\\s+","");
+
         //format must be in letter-number coordinate, example: a1, b4, c3
         int[] returnVal = new int[2];
 
         if(userInput.length() == 1 || userInput.length() > 3) {
-            throw new InvalidParameterException( ANSIcolors.RED_TEXT + "Invalid tile length... try again.\n" + ANSIcolors.ANSI_RESET);
+            throw new InvalidParameterException(userInput + ": " + ANSIcolors.RED_TEXT + "Invalid tile length... try again." + ANSIcolors.ANSI_RESET);
         }
 
         int yValue = (int)Character.toLowerCase(userInput.charAt(0)) - 97;
         if(yValue < 0 || yValue > maxSize) {
-            throw new InvalidParameterException( ANSIcolors.RED_TEXT + "Column " + userInput.charAt(0) + " is out of bounds, try again.\n" + ANSIcolors.ANSI_RESET);
+            throw new InvalidParameterException(userInput + ": " + ANSIcolors.RED_TEXT + "Column " + userInput.charAt(0) + " is out of bounds, try again." + ANSIcolors.ANSI_RESET);
         }
 
         int xValue =  Integer.parseInt(userInput.substring(1)) - 1;
         if(xValue < 0 || xValue >= maxSize) {
-            throw new InvalidParameterException( ANSIcolors.RED_TEXT + "Row " + (xValue+1) + " is out of bounds, try again.\n" + ANSIcolors.ANSI_RESET);
+            throw new InvalidParameterException(userInput + ": " + ANSIcolors.RED_TEXT + "Row " + (xValue+1) + " is out of bounds, try again." + ANSIcolors.ANSI_RESET);
         }
 
         returnVal[0] = xValue;

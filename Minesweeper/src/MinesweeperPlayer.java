@@ -52,41 +52,43 @@ public class MinesweeperPlayer {
     private int GetPlayerCommand(Scanner input)
     {
         String userCommand = InputParser.AskForCommand(input, "Enter your command: ", ValidCommands);
-        String[] userCommands = userCommand.split("\\s+");
+        String[] userParameters = userCommand.split("\\s+");
 
-        switch (userCommands[0])
+        switch (userParameters[0])
         {
             case "help", "commands": CMD_Help(); return 1;
             case "flag":
-                if(userCommands.length < 2) {
+                if(userParameters.length < 2) {
                     System.out.println(ANSIcolors.RED_TEXT + "No Parameters given...\n" + ANSIcolors.ANSI_RESET);
                     return 0;
                 };
-                if(userCommands[1].equals("-b") || userCommands[1].equals("bombs")) {
+                if(userParameters[1].equals("-b") || userParameters[1].equals("bombs")) {
                     CMD_FlagAllBombs();
                     return 1;
                 }
-                CMD_FlagTile(userCommands[1]); PrintGrid();
+                CMD_FlagTile(userParameters[1]); PrintGrid();
                 return 1;
             case "show", "grid": PrintGrid(); return 1;
             case "reset", "new": System.out.println("\n"); InitialiseNewGame(input); return 1;
             case "color":
-                if(userCommands.length < 2) {
+                if(userParameters.length < 2) {
                     System.out.println(ANSIcolors.RED_TEXT + "No Parameters given...\n" + ANSIcolors.ANSI_RESET);
                     return 0;
                 };
-                CMD_ChangeColor(userCommands[1]); PrintGrid();
+                CMD_ChangeColor(userParameters[1]); PrintGrid();
                 return 1;
             case "reveal": CMD_Reveal(); return 1;
             case "exit": CMD_Exit(); return 1;
         }
 
         //User entered a tile (a1, d4, b8, etc)
-        if(userCommand.length() == 2 ||  userCommand.length() == 3){
-            if(CMD_ClickTile(userCommand)) return 0;
-            if(Grid.CheckForWin()) {
-                CMD_Reveal();
-                return 1;
+        if(userParameters[0].length() == 2 ||  userParameters[0].length() == 3){
+            for(int params = 0 ; params < (userParameters.length) ; params++) {
+                if (CMD_ClickTile(userParameters[params])) return 0;
+                if (Grid.CheckForWin()) {
+                    CMD_Reveal();
+                    return 1;
+                }
             }
             PrintGrid();
             return 1;
@@ -166,6 +168,10 @@ public class MinesweeperPlayer {
         System.out.println(ANSIcolors.BLUE_TEXT + "color <" + ANSIcolors.YELLOW_TEXT + "option" + ANSIcolors.BLUE_TEXT + ">" + ANSIcolors.ANSI_RESET + " - Changes grid color");
         System.out.println(ANSIcolors.YELLOW_TEXT + "    option" + ANSIcolors.ANSI_RESET + ": yellow, blue, green, pink, cyan, red, chess, invisible");
         System.out.println(ANSIcolors.BLUE_TEXT + "<" + ANSIcolors.YELLOW_TEXT + "tile" + ANSIcolors.BLUE_TEXT + ">" + ANSIcolors.ANSI_RESET + " - Selects that tile (e.g \"a4\" or \"f6\")");
+        System.out.println(ANSIcolors.BLUE_TEXT + "<" + ANSIcolors.YELLOW_TEXT + "tile" + ANSIcolors.BLUE_TEXT + "> " + ANSIcolors.ANSI_RESET +
+                ANSIcolors.BLUE_TEXT + "<" + ANSIcolors.YELLOW_TEXT + "tile" + ANSIcolors.BLUE_TEXT + ">" + ANSIcolors.ANSI_RESET +
+                " ... - Selects multiple tiles (e.g \"a4 b4\" or \"f6 e7 a1\")");
+
         System.out.println();
         System.out.println(ANSIcolors.RED_TEXT + "reveal" + ANSIcolors.ANSI_RESET + " - (" + ANSIcolors.RED_TEXT + "Cheat" + ANSIcolors.ANSI_RESET + ") Reveals the whole grid");
         System.out.println(ANSIcolors.RED_TEXT + "flag " + ANSIcolors.YELLOW_TEXT + "-b, bombs" + ANSIcolors.ANSI_RESET + " - (" + ANSIcolors.RED_TEXT + "Cheat" + ANSIcolors.ANSI_RESET + ") Flags all bombs");
