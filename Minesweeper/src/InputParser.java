@@ -43,7 +43,7 @@ public abstract class InputParser {
         while(true)
         {
             System.out.print(query);
-            String fullInput = input.nextLine().toLowerCase();
+            String fullInput = input.nextLine().toLowerCase().trim();
             String[] inputs = fullInput.split("\\s+"); //use instead of space to split multiple spaces
 
             if(ValidCommands.contains((inputs[0]))) return fullInput;
