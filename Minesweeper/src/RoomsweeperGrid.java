@@ -36,13 +36,35 @@ public class RoomsweeperGrid extends MinesweeperGrid{
 
         while(numberOfWalls > 0)
         {
-            RoomsweeperTile tile = (RoomsweeperTile)Tiles[(int)(Math.random() * Tiles.length)][(int)(Math.random() * Tiles.length)];
+            int xPos = (int)(Math.random() * Tiles.length);
+            int yPos = (int)(Math.random() * Tiles.length);
+
+            RoomsweeperTile tile = (RoomsweeperTile)Tiles[xPos][yPos];
+            //fill this tile
             if(tile.IsBomb() || tile.IsWall()) continue;
             tile.SetWall(true);
             tile.Reveal();
             numberOfWalls--;
+
+            int firstTile = (int)(Math.random() * 3) - 1;
+            int secondTile = (int)(Math.random() * 3) - 1;
+
+            if(firstTile == 1) { PlaceWallAt(xPos + 1, yPos); }
+            else if (firstTile == -1){ PlaceWallAt(xPos, yPos + 1); }
+
+            if(secondTile == 1) { PlaceWallAt(xPos - 1, yPos); }
+            else if (secondTile == -1){ PlaceWallAt(xPos, yPos - 1); }
         }
         numberOfWalls = t_bomb;
+    }
+
+    private void PlaceWallAt(int x, int y){
+        if(x >= Tiles.length || y >= Tiles.length || x < 0 || y < 0 || numberOfWalls <= 0) return;
+        RoomsweeperTile rt = (RoomsweeperTile)Tiles[x][y];
+        if(rt.IsBomb() || rt.IsWall()) return;
+        rt.SetWall(true);
+        rt.Reveal();
+        numberOfWalls--;
     }
 
     @Override
