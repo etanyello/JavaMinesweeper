@@ -66,7 +66,8 @@ public class MinesweeperPlayer {
                     CMD_FlagAllBombs();
                     return 1;
                 }
-                CMD_FlagTile(userParameters[1]); PrintGrid();
+                for(int i = 1 ; i < userParameters.length ; i++) { CMD_FlagTile(userParameters[i]); }
+                PrintGrid();
                 return 1;
             case "show", "grid": PrintGrid(); return 1;
             case "reset", "new": System.out.println("\n"); InitialiseNewGame(input); return 1;
