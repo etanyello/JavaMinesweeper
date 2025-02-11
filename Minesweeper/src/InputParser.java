@@ -68,12 +68,12 @@ public abstract class InputParser {
 
         int yValue = (int)Character.toLowerCase(userInput.charAt(0)) - 97;
         if(yValue < 0 || yValue > maxSize) {
-            throw new InvalidParameterException( ANSIcolors.RED_TEXT + "Row " + userInput.charAt(0) + " is out of bounds, try again.\n" + ANSIcolors.ANSI_RESET);
+            throw new InvalidParameterException( ANSIcolors.RED_TEXT + "Column " + userInput.charAt(0) + " is out of bounds, try again.\n" + ANSIcolors.ANSI_RESET);
         }
 
         int xValue =  Integer.parseInt(userInput.substring(1)) - 1;
         if(xValue < 0 || xValue >= maxSize) {
-            throw new InvalidParameterException( ANSIcolors.RED_TEXT + "Column " + (xValue+1) + " is out of bounds, try again.\n" + ANSIcolors.ANSI_RESET);
+            throw new InvalidParameterException( ANSIcolors.RED_TEXT + "Row " + (xValue+1) + " is out of bounds, try again.\n" + ANSIcolors.ANSI_RESET);
         }
 
         returnVal[0] = xValue;
