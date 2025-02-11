@@ -60,6 +60,9 @@ public abstract class InputParser {
             String fullInput = input.nextLine().toLowerCase().trim();
 
             if(ValidStrings.contains(fullInput)) return fullInput;
+
+            System.out.println(ANSIcolors.RED_TEXT + "Invalid command...\n" + ANSIcolors.ANSI_RESET);
+
         }
     }
 
