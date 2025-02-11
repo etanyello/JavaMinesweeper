@@ -94,7 +94,7 @@ public class MinesweeperGrid {
         }
     }
 
-    private MinesweeperTile[] GetSurroundingTiles(int x, int y)
+    protected MinesweeperTile[] GetSurroundingTiles(int x, int y)
     {
         MinesweeperTile[] SurroundingTiles = new MinesweeperTile[8];
 

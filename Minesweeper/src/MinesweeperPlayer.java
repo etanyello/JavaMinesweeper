@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class MinesweeperPlayer {
     private MinesweeperGrid Grid;
     private final List<String> ValidCommands = List.of("help", "flag", "grid", "show", "commands", "reset", "new", "color", "reveal", "exit");
-    private final List<String> ValidGamemodes = List.of("default", "d", "walls", "w");
+    private final List<String> ValidGamemodes = List.of("default", "d", "walls", "w", "cardinal", "c", "cross");
     private ColorEnum selectedColor = ColorEnum.Yellow;
     private MinesweeperTimer timer;
 
@@ -40,7 +40,7 @@ public class MinesweeperPlayer {
 
     private void InitialiseNewGame(Scanner input)
     {
-        String gm = InputParser.AskForString(input, "Which game mode would you like to play?\n  -Default\n  -Walls\nYour Choice: ", ValidGamemodes);
+        String gm = InputParser.AskForString(input, "Which game mode would you like to play?\n  -Default\n  -Walls\n  -cardinal\n  -cross\nYour Choice: ", ValidGamemodes);
         Grid = GetGamemode(gm, input);
         turn = 0;
         GameOver = false;
@@ -112,6 +112,16 @@ public class MinesweeperPlayer {
                 float wRatio = 0.05f + (0.05f * (float)InputParser.AskForIntInput(input, "What ratio of walls would you like: (" + ANSIcolors.BLUE_TEXT  + "1-5" + ANSIcolors.ANSI_RESET + "): ", 1, 5));
                 System.out.println("\n");
                 return new RoomsweeperGrid(gridSize, difficulty * 0.8f, wRatio);
+            case "cardinal", "c":
+                gridSize = InputParser.AskForIntInput(input, "How big do you want your grid (" + ANSIcolors.BLUE_TEXT  + "5-26" + ANSIcolors.ANSI_RESET + "): ", 5, 26);
+                difficulty = 0.05f + (0.05f * (float)InputParser.AskForIntInput(input, "What difficulty would you like: (" + ANSIcolors.BLUE_TEXT  + "1-5" + ANSIcolors.ANSI_RESET + "): ", 1, 5));
+                System.out.println("\n");
+                return new CardinalGrid(gridSize, difficulty);
+            case "cross":
+                gridSize = InputParser.AskForIntInput(input, "How big do you want your grid (" + ANSIcolors.BLUE_TEXT  + "5-26" + ANSIcolors.ANSI_RESET + "): ", 5, 26);
+                difficulty = 0.05f + (0.05f * (float)InputParser.AskForIntInput(input, "What difficulty would you like: (" + ANSIcolors.BLUE_TEXT  + "1-5" + ANSIcolors.ANSI_RESET + "): ", 1, 5));
+                System.out.println("\n");
+                return new CrossGrid(gridSize, difficulty);
             default:
                 System.out.println("Invalid game mode supplied... -1");
                 return null;
