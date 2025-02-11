@@ -162,7 +162,11 @@ public class MinesweeperPlayer {
     {
         System.out.println("\nCommands:");
         System.out.println(ANSIcolors.BLUE_TEXT + "help, commands" + ANSIcolors.ANSI_RESET + " - Displays a list of commands");
-        System.out.println(ANSIcolors.BLUE_TEXT + "flag <" + ANSIcolors.YELLOW_TEXT + "tile" + ANSIcolors.BLUE_TEXT + ">" + ANSIcolors.ANSI_RESET + " - Flags a tile you think a bomb is at");
+        System.out.println(ANSIcolors.BLUE_TEXT + "flag <" + ANSIcolors.YELLOW_TEXT + "tile" + ANSIcolors.BLUE_TEXT + ">" + ANSIcolors.ANSI_RESET + " - Flags a tile you think a bomb is at (e.g \"flag a3\" or \"flag b2\")");
+        System.out.println(ANSIcolors.BLUE_TEXT + "flag <" + ANSIcolors.YELLOW_TEXT + "tile" + ANSIcolors.BLUE_TEXT + "> " +
+                ANSIcolors.BLUE_TEXT + "<" + ANSIcolors.YELLOW_TEXT + "tile" + ANSIcolors.BLUE_TEXT + ">" + ANSIcolors.ANSI_RESET +
+                " ... - Flag multiple tiles you think bombs are at (e.g \"flag b2 b3\" or \"flag b6 c3 a3\")");
+
         System.out.println(ANSIcolors.BLUE_TEXT + "grid, show" + ANSIcolors.ANSI_RESET + " - Prints out the grid");
         System.out.println(ANSIcolors.BLUE_TEXT + "reset, new" + ANSIcolors.ANSI_RESET + " - Generates a new Grid");
         System.out.println(ANSIcolors.BLUE_TEXT + "exit" + ANSIcolors.ANSI_RESET + " - Closes the game");
