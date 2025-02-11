@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
 public class MinesweeperGrid {
-    MinesweeperTile[][] Tiles;
-    private int numberOfBombs;
+    protected MinesweeperTile[][] Tiles;
+    protected int numberOfBombs;
 
 
     private final String SIDE_BAR = "▓ ";
@@ -34,6 +34,7 @@ public class MinesweeperGrid {
             "\033[1;34m",
             "\033[1;37m"};
 
+    public MinesweeperGrid() {this(8, 0.1f);}
     public MinesweeperGrid(int size, float BombRatio)
     {
         SetupGrid(size);
@@ -43,7 +44,7 @@ public class MinesweeperGrid {
         SetSurroundingTiles();
     }
 
-    private void SetupGrid(int size)
+    protected void SetupGrid(int size)
     {
         size = Math.clamp(size, 0, 26);
 
@@ -59,7 +60,7 @@ public class MinesweeperGrid {
         }
     }
 
-    private void PlaceBombs(float BombRatio)
+    protected void PlaceBombs(float BombRatio)
     {
         numberOfBombs = (int)(Math.clamp(BombRatio,0f, 1f) * (Tiles.length* Tiles.length));
         int t_bomb = numberOfBombs;

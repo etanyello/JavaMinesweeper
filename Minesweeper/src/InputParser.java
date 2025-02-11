@@ -54,6 +54,15 @@ public abstract class InputParser {
         }
     }
 
+    public static String AskForString(Scanner input, String query, List<String> ValidStrings){
+        while(true){
+            System.out.print(query);
+            String fullInput = input.nextLine().toLowerCase().trim();
+
+            if(ValidStrings.contains(fullInput)) return fullInput;
+        }
+    }
+
     public static int[] AskForCoordinates(String userInput, int maxSize) throws InvalidParameterException
     {
         userInput = userInput.replaceAll("\\s+","");
